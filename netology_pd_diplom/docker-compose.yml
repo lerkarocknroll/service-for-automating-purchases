@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: diplom_db
+      POSTGRES_USER: diplom_user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  web:
+    build: .
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py createsuperuser --noinput --email admin@example.com --username admin || true &&
+             gunicorn netology_pd_diplom.wsgi:application --bind 0.0.0.0:8000"
+    environment:
+      DATABASE_URL: postgres://diplom_user:password@db:5432/diplom_db
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  celery_worker:
+    build: .
+    command: celery -A netology_pd_diplom worker --loglevel=info
+    environment:
+      DATABASE_URL: postgres://diplom_user:password@db:5432/diplom_db
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+
+volumes:
+  postgres_data:
