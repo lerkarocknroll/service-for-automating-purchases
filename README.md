@@ -13,6 +13,10 @@
 9. [Тестирование](#тестирование)
 10. [Примеры запросов](#примеры-запросов)
 
+<img width="1869" height="875" alt="IMG_20260326_151013" src="https://github.com/user-attachments/assets/9b2376e8-c519-462e-b641-8960a195c3b9" />
+<img width="1869" height="884" alt="IMG_20260326_151016" src="https://github.com/user-attachments/assets/f3b76789-1ae4-4b28-9da6-5d8a0e16dc68" />
+<img width="1869" height="880" alt="IMG_20260326_151021" src="https://github.com/user-attachments/assets/262b5969-34d0-40cf-8827-8eb15ec18513" />
+
 ---
 
 ## Описание проекта
