@@ -1,4 +1,3 @@
-
 # Backend-приложение для автоматизации закупок в розничной сети
 
 ## Оглавление
@@ -12,9 +11,7 @@
 8. [Работа с Docker](#работа-с-docker)
 9. [Тестирование](#тестирование)
 10. [Примеры запросов](#примеры-запросов)
-<img width="1869" height="875" alt="IMG_20260326_151013" src="https://github.com/user-attachments/assets/9b2376e8-c519-462e-b641-8960a195c3b9" />
-<img width="1869" height="884" alt="IMG_20260326_151016" src="https://github.com/user-attachments/assets/f3b76789-1ae4-4b28-9da6-5d8a0e16dc68" />
-<img width="1869" height="880" alt="IMG_20260326_151021" src="https://github.com/user-attachments/assets/262b5969-34d0-40cf-8827-8eb15ec18513" />
+11. [Postman коллекция](#postman-коллекция)
 
 ---
 
@@ -73,13 +70,12 @@ REST API сервис для автоматизации закупок в роз
 ---
 
 ## Структура проекта
+
 ```
 netology_pd_diplom/
 │
 ├── backend/                           # Основное приложение
 │   ├── migrations/                    # Миграции базы данных
-│   │   ├── __init__.py
-│   │   └── 0001_initial.py
 │   ├── __init__.py
 │   ├── admin.py                       # Настройка админ-панели
 │   ├── apps.py                        # Конфигурация приложения
@@ -101,6 +97,7 @@ netology_pd_diplom/
 ├── data/                              # Тестовые данные
 │   └── shop1.yaml                     # Пример прайс-листа
 │
+├── .env.example                       # Шаблон переменных окружения
 ├── .gitignore                         # Игнорируемые файлы
 ├── docker-compose.yml                 # Docker оркестрация
 ├── Dockerfile                         # Docker образ
@@ -108,7 +105,6 @@ netology_pd_diplom/
 ├── README.md                          # Документация
 └── requirements.txt                   # Зависимости Python
 ```
-
 
 ---
 
@@ -215,32 +211,45 @@ netology_pd_diplom/
 - Redis 7.0+
 - Git
 
+### Настройка переменных окружения
+
+1. Скопируйте файл `.env.example` в `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Отредактируйте `.env`, указав свои данные:
+   - Пароль PostgreSQL
+   - Настройки email
+   - Секретный ключ Django
+
+> **Важно:** Файл `.env` добавлен в `.gitignore` и не попадёт в репозиторий.
+
 ### Локальный запуск
 
 1. **Клонирование репозитория**
-```bash
-git clone <repository-url>
-cd netology_pd_diplom
-```
+   ```bash
+   git clone <repository-url>
+   cd netology_pd_diplom
+   ```
 
 2. **Создание виртуального окружения**
-```bash
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
-```
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Linux/Mac
+   venv\Scripts\activate     # Windows
+   ```
 
 3. **Установка зависимостей**
-```bash
-pip install --upgrade pip
-pip install -r requirements.txt
-```
+   ```bash
+   pip install --upgrade pip
+   pip install -r requirements.txt
+   ```
 
 4. **Настройка базы данных**
 
-   Для SQLite (разработка):
+   Для SQLite (разработка) — настройки уже в `settings.py`:
    ```python
-   # settings.py
    DATABASES = {
        'default': {
            'ENGINE': 'django.db.backends.sqlite3',
@@ -249,38 +258,40 @@ pip install -r requirements.txt
    }
    ```
 
-   Для PostgreSQL:
-   ```sql
-   CREATE DATABASE diplom_db;
-   CREATE USER diplom_user WITH PASSWORD 'password';
-   GRANT ALL PRIVILEGES ON DATABASE diplom_db TO diplom_user;
+   Для PostgreSQL — укажите параметры в файле `.env`:
+   ```
+   POSTGRES_DB=diplom_db
+   POSTGRES_USER=postgres
+   POSTGRES_PASSWORD=your_password
+   POSTGRES_HOST=localhost
+   POSTGRES_PORT=5432
    ```
 
 5. **Применение миграций**
-```bash
-python manage.py makemigrations
-python manage.py migrate
-python manage.py createsuperuser
-```
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   python manage.py createsuperuser
+   ```
 
 6. **Запуск Redis**
-```bash
-redis-server
-```
+   ```bash
+   redis-server
+   ```
 
 7. **Запуск Celery worker** (в отдельном терминале)
-```bash
-celery -A netology_pd_diplom worker --loglevel=info
-```
+   ```bash
+   celery -A netology_pd_diplom worker --loglevel=info
+   ```
 
 8. **Запуск Django сервера**
-```bash
-python manage.py runserver
-```
+   ```bash
+   python manage.py runserver
+   ```
 
 9. **Проверка работы**
-- Админка: http://127.0.0.1:8000/admin/
-- API: http://127.0.0.1:8000/api/v1/
+   - Админка: http://127.0.0.1:8000/admin/
+   - API: http://127.0.0.1:8000/api/v1/
 
 ---
 
@@ -293,19 +304,19 @@ python manage.py runserver
 ### Запуск через Docker Compose
 
 1. **Сборка и запуск контейнеров**
-```bash
-docker-compose up --build
-```
+   ```bash
+   docker-compose up --build
+   ```
 
 2. **Проверка работы**
-```bash
-docker-compose ps
-```
+   ```bash
+   docker-compose ps
+   ```
 
 3. **Остановка контейнеров**
-```bash
-docker-compose down
-```
+   ```bash
+   docker-compose down
+   ```
 
 ### Состав Docker-контейнеров
 | Сервис | Порт | Назначение |
@@ -388,25 +399,49 @@ curl -X POST http://127.0.0.1:8000/api/v1/partner/update \
 
 ---
 
+## Postman коллекция
+
+В репозитории находится файл `backend/Diplom_API_Collection.json` — готовая коллекция для Postman.
+
+### Импорт коллекции
+1. Откройте Postman
+2. Нажмите **Import**
+3. Выберите файл `Diplom_API_Collection.json`
+4. В переменной `base_url` укажите `http://127.0.0.1:8000/api/v1`
+5. Выполняйте запросы в порядке:
+   - `01. Register User` → регистрация
+   - `02. Login User` → авторизация (токен сохранится автоматически)
+   - `03. Get Products` → просмотр товаров
+   - `06. Add to Basket` → добавление в корзину
+   - `08. Create Contact` → создание контакта
+   - `10. Create Order` → оформление заказа
+   - `11. Get Orders` → просмотр заказов
+
+---
+
 ## Переменные окружения
 
-Создайте файл `.env` в корне проекта:
+Создайте файл `.env` в корне проекта на основе `.env.example`:
 
 ```env
+# Django
+SECRET_KEY=your-secret-key-here-change-in-production
+DEBUG=True
+
 # Database
 POSTGRES_DB=diplom_db
-POSTGRES_USER=diplom_user
-POSTGRES_PASSWORD=password
-POSTGRES_HOST=db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your_password_here
+POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 
 # Redis
-REDIS_URL=redis://redis:6379/0
+REDIS_URL=redis://localhost:6379/0
 
 # Email
 EMAIL_HOST=smtp.mail.ru
 EMAIL_HOST_USER=your_email@mail.ru
-EMAIL_HOST_PASSWORD=your_password
+EMAIL_HOST_PASSWORD=your_password_here
 EMAIL_PORT=465
 EMAIL_USE_SSL=True
 ```
