@@ -1,0 +1,283 @@
+{
+  "info": {
+    "name": "Diplom API - Автоматизация закупок",
+    "description": "REST API сервис для автоматизации закупок в розничной сети",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01. Register User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"first_name\": \"Иван\",\n    \"last_name\": \"Петров\",\n    \"email\": \"buyer@test.ru\",\n    \"password\": \"buyer123\",\n    \"company\": \"\",\n    \"position\": \"\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/user/register",
+          "host": ["{{base_url}}"],
+          "path": ["user", "register"]
+        }
+      }
+    },
+    {
+      "name": "02. Login User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"buyer@test.ru\",\n    \"password\": \"buyer123\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/user/login",
+          "host": ["{{base_url}}"],
+          "path": ["user", "login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "03. Get Categories",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/categories",
+          "host": ["{{base_url}}"],
+          "path": ["categories"]
+        }
+      }
+    },
+    {
+      "name": "04. Get Shops",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/shops",
+          "host": ["{{base_url}}"],
+          "path": ["shops"]
+        }
+      }
+    },
+    {
+      "name": "05. Get Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/products",
+          "host": ["{{base_url}}"],
+          "path": ["products"]
+        }
+      }
+    },
+    {
+      "name": "06. Add to Basket",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"items\": \"[{\\\"product_info\\\": 1, \\\"quantity\\\": 2}]\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/basket",
+          "host": ["{{base_url}}"],
+          "path": ["basket"]
+        }
+      }
+    },
+    {
+      "name": "07. View Basket",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/basket",
+          "host": ["{{base_url}}"],
+          "path": ["basket"]
+        }
+      }
+    },
+    {
+      "name": "08. Create Contact",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"city\": \"Москва\",\n    \"street\": \"Тверская\",\n    \"house\": \"1\",\n    \"phone\": \"89991234567\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/contacts",
+          "host": ["{{base_url}}"],
+          "path": ["contacts"]
+        }
+      }
+    },
+    {
+      "name": "09. Get Contacts",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/contacts",
+          "host": ["{{base_url}}"],
+          "path": ["contacts"]
+        }
+      }
+    },
+    {
+      "name": "10. Create Order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"id\": 1,\n    \"contact\": 1\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/orders",
+          "host": ["{{base_url}}"],
+          "path": ["orders"]
+        }
+      }
+    },
+    {
+      "name": "11. Get Orders",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/orders",
+          "host": ["{{base_url}}"],
+          "path": ["orders"]
+        }
+      }
+    },
+    {
+      "name": "12. Partner Import",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"url\": \"http://127.0.0.1:8001/shop1.yaml\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/partner/update",
+          "host": ["{{base_url}}"],
+          "path": ["partner", "update"]
+        }
+      }
+    },
+    {
+      "name": "13. Partner State",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/partner/state",
+          "host": ["{{base_url}}"],
+          "path": ["partner", "state"]
+        }
+      }
+    },
+    {
+      "name": "14. Partner Orders",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/partner/orders",
+          "host": ["{{base_url}}"],
+          "path": ["partner", "orders"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000/api/v1"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
